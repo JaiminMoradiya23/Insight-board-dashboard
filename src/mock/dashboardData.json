@@ -1,0 +1,43 @@
+{
+  "summary": {
+    "totalUsers": 1250,
+    "activeUsers": 890,
+    "totalRevenue": 45678,
+    "growthRate": 12.5
+  },
+  "revenueData": {
+    "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun"],
+    "datasets": [
+      {
+        "label": "Revenue",
+        "data": [12000, 19000, 15000, 25000, 22000, 30000],
+        "borderColor": "rgb(75, 192, 192)",
+        "tension": 0.1
+      }
+    ]
+  },
+  "userActivity": {
+    "labels": ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
+    "datasets": [
+      {
+        "label": "Active Users",
+        "data": [65, 59, 80, 81, 56, 55, 40],
+        "backgroundColor": "rgba(54, 162, 235, 0.5)"
+      }
+    ]
+  },
+  "userDistribution": {
+    "labels": ["North", "South", "East", "West"],
+    "datasets": [
+      {
+        "data": [30, 25, 20, 25],
+        "backgroundColor": [
+          "rgba(255, 99, 132, 0.5)",
+          "rgba(54, 162, 235, 0.5)",
+          "rgba(255, 206, 86, 0.5)",
+          "rgba(75, 192, 192, 0.5)"
+        ]
+      }
+    ]
+  }
+} 
