@@ -30,7 +30,7 @@
     "labels": ["North", "South", "East", "West"],
     "datasets": [
       {
-        "data": [30, 25, 20, 25],
+        "data": [28, 23, 37, 12],
         "backgroundColor": [
           "rgba(255, 99, 132, 0.5)",
           "rgba(54, 162, 235, 0.5)",

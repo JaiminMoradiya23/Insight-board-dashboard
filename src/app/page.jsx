@@ -1,41 +1,75 @@
 'use client';
 
-import { useState } from 'react';
-import { Line, Bar, Doughnut } from 'react-chartjs-2';
-import {
-  Chart as ChartJS,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend,
-} from 'chart.js';
+import { useState, useEffect } from 'react';
 import { Users, TrendingUp, DollarSign, Activity } from 'lucide-react';
 import ChartCard from '../Components/ChartCard';
+import SummaryCard from '../Components/SummaryCard';
 import Sidebar from '../Components/Sidebar';
 import Header from '../Components/Header';
+import Loader from '../Components/Loader';
 import dashboardData from '../mock/dashboardData.json';
 import clsx from 'clsx';
+import RevenueChart from '../Charts/RevenueChart';
+import UserActivityChart from '../Charts/UserActivityChart';
+import UserDistributionChart from '../Charts/UserDistributionChart';
+import AreaChart from '../Charts/AreaChart';
+import PolarChart from '../Charts/PolarChart';
+import { ThemeProvider, useTheme } from '../context/ThemeContext';
 
-// Register ChartJS components
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  BarElement,
-  ArcElement,
-  Title,
-  Tooltip,
-  Legend
-);
-
-export default function Dashboard() {
+function DashboardContent() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const { isDarkMode } = useTheme();
+  const [chartData, setChartData] = useState({
+    revenue: null,
+    activity: null,
+    distribution: null,
+    area: null,
+    polar: null
+  });
+
+  useEffect(() => {
+    // Simulate data fetching
+    const fetchData = async () => {
+      setTimeout(() => {
+        setChartData({
+          revenue: dashboardData.revenueData,
+          activity: dashboardData.userActivity,
+          distribution: dashboardData.userDistribution,
+          area: {
+            labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+            datasets: [
+              {
+                label: 'Total Sales',
+                data: [12000, 19000, 15000, 25000, 22000, 30000],
+                borderColor: 'rgb(99, 102, 241)',
+                backgroundColor: 'rgba(99, 102, 241, 0.2)',
+              },
+              {
+                label: 'Total Revenue',
+                data: [15000, 22000, 18000, 28000, 25000, 35000],
+                borderColor: 'rgb(139, 92, 246)',
+                backgroundColor: 'rgba(139, 92, 246, 0.2)',
+              }
+            ]
+          },
+          polar: {
+            labels: ['Desktop', 'Mobile', 'Tablet', 'Other'],
+            datasets: [{
+              data: [300, 250, 100, 50],
+              backgroundColor: [
+                'rgba(99, 102, 241, 0.8)',
+                'rgba(139, 92, 246, 0.8)',
+                'rgba(168, 85, 247, 0.8)',
+                'rgba(217, 70, 239, 0.8)'
+              ]
+            }]
+          }
+        });
+      }, 1000);
+    };
+
+    fetchData();
+  }, []);
 
   const toggleSidebar = () => {
     setIsSidebarOpen(!isSidebarOpen);
@@ -69,7 +103,12 @@ export default function Dashboard() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={clsx(
+      'min-h-screen bg-gradient-to-br',
+      isDarkMode 
+        ? 'from-gray-900 via-gray-800 to-gray-900'
+        : 'from-gray-50 via-slate-50 to-zinc-50'
+    )}>
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       <Header toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
       
@@ -80,75 +119,95 @@ export default function Dashboard() {
         'lg:group-hover:pl-64'
       )}>
         <div className="p-6">
-          <h1 className="text-3xl font-bold text-gray-800 mb-8">Dashboard Overview</h1>
+          <h1 className={clsx(
+            'text-3xl font-bold mb-8',
+            isDarkMode ? 'text-white' : 'text-gray-800'
+          )}>
+            Dashboard Overview
+          </h1>
           
           {/* Summary Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
             {summaryCards.map((card, index) => (
-              <div
+              <SummaryCard
                 key={index}
-                className="bg-white rounded-lg border border-gray-200 p-6 flex items-center"
-              >
-                <div className={`${card.color} p-3 rounded-lg mr-4`}>
-                  <card.icon className="w-6 h-6 text-white" />
-                </div>
-                <div>
-                  <h3 className="text-sm text-gray-500">{card.title}</h3>
-                  <p className="text-2xl font-semibold text-gray-800">{card.value}</p>
-                </div>
-              </div>
+                title={card.title}
+                value={card.value}
+                icon={card.icon}
+                color={card.color}
+              />
             ))}
           </div>
 
           {/* Charts Grid */}
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <ChartCard title="Revenue Trend">
-              <Line
-                data={dashboardData.revenueData}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  plugins: {
-                    legend: {
-                      position: 'top',
-                    },
-                  },
-                }}
-              />
+          <div className="space-y-6">
+            {/* Full-width Area Chart */}
+            <ChartCard title="Sales Overview" className="w-full">
+              {chartData.area ? (
+                <AreaChart data={chartData.area} />
+              ) : (
+                <div className="h-full">
+                  <Loader />
+                </div>
+              )}
             </ChartCard>
 
-            <ChartCard title="User Activity">
-              <Bar
-                data={dashboardData.userActivity}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  plugins: {
-                    legend: {
-                      position: 'top',
-                    },
-                  },
-                }}
-              />
-            </ChartCard>
+            {/* Two-column charts */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <ChartCard title="Revenue Trend">
+                {chartData.revenue ? (
+                  <RevenueChart data={chartData.revenue} />
+                ) : (
+                  <div className="h-full">
+                    <Loader />
+                  </div>
+                )}
+              </ChartCard>
 
-            <ChartCard title="User Distribution">
-              <Doughnut
-                data={dashboardData.userDistribution}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  plugins: {
-                    legend: {
-                      position: 'top',
-                    },
-                  },
-                }}
-              />
-            </ChartCard>
+              <ChartCard title="User Activity">
+                {chartData.activity ? (
+                  <UserActivityChart data={chartData.activity} />
+                ) : (
+                  <div className="h-full">
+                    <Loader />
+                  </div>
+                )}
+              </ChartCard>
+            </div>
+
+            {/* Two-column charts */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+              <ChartCard title="User Distribution">
+                {chartData.distribution ? (
+                  <UserDistributionChart data={chartData.distribution} />
+                ) : (
+                  <div className="h-full">
+                    <Loader />
+                  </div>
+                )}
+              </ChartCard>
+
+              <ChartCard title="Device Usage">
+                {chartData.polar ? (
+                  <PolarChart data={chartData.polar} />
+                ) : (
+                  <div className="h-full">
+                    <Loader />
+                  </div>
+                )}
+              </ChartCard>
+            </div>
           </div>
         </div>
       </main>
     </div>
+  );
+}
+
+export default function Dashboard() {
+  return (
+    <ThemeProvider>
+      <DashboardContent />
+    </ThemeProvider>
   );
 }
