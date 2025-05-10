@@ -109,12 +109,9 @@ function DashboardContent() {
         ? 'from-gray-900 via-gray-800 to-gray-900'
         : 'from-gray-50 via-slate-50 to-zinc-50'
     )}>
-      <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
-      <Header toggleSidebar={toggleSidebar} isSidebarOpen={isSidebarOpen} />
-      
       <main className={clsx(
         'transition-all duration-300 ease-in-out',
-        'pt-16',
+        'mt-16 overflow-auto',
         isSidebarOpen ? 'lg:pl-64' : 'lg:pl-20',
         'lg:group-hover:pl-64'
       )}>

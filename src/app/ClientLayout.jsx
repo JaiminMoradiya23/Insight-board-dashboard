@@ -18,7 +18,7 @@ export default function ClientLayout({ children }) {
         <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
         <div className="flex-1 flex flex-col">
           <Header toggleSidebar={toggleSidebar} />
-          <main className="flex-1 overflow-auto">
+          <main className="flex-1">
             {children}
           </main>
         </div>
