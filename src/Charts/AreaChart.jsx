@@ -120,7 +120,7 @@ const AreaChart = ({ data }) => {
       pointBorderWidth: 2,
       pointRadius: 4,
       pointHoverRadius: 6,
-      tension: 0.4,
+      tension: 0,
     })),
   };
 

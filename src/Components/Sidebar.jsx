@@ -4,16 +4,26 @@ import Image from 'next/image';
 import { useTheme } from '../context/ThemeContext';
 import { useState } from 'react';
 import { Switch } from '@headlessui/react';
+import { useRouter, usePathname } from 'next/navigation';
 
 export default function Sidebar({ isOpen, toggleSidebar }) {
     const { isDarkMode, toggleTheme } = useTheme();
+    const router = useRouter();
+    const pathname = usePathname();
 
     const menuItems = [
-        { icon: Home, label: 'Dashboard', active: true },
-        { icon: BarChart2, label: 'Analytics' },
-        { icon: Users, label: 'Users' },
-        { icon: Settings, label: 'Settings' },
+        { icon: Home, label: 'Dashboard', path: '/' },
+        { icon: BarChart2, label: 'Analytics', path: '/analytics' },
+        { icon: Users, label: 'Users', path: '/users' },
+        { icon: Settings, label: 'Settings', path: '/settings' },
     ];
+
+    const handleNavigation = (path) => {
+        router.push(path);
+        if (window.innerWidth < 1024) {
+            toggleSidebar();
+        }
+    };
 
     return (
         <>
@@ -56,9 +66,10 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
                     {menuItems.map((item, index) => (
                         <button
                             key={index}
+                            onClick={() => handleNavigation(item.path)}
                             className={clsx(
                                 'flex items-center w-full p-3 rounded-lg mb-2 transition-colors',
-                                item.active
+                                pathname === item.path
                                     ? isDarkMode 
                                         ? 'bg-blue-900/20 text-blue-400'
                                         : 'bg-blue-50 text-blue-600'
@@ -84,24 +95,36 @@ export default function Sidebar({ isOpen, toggleSidebar }) {
 
                 {/* Theme toggle at bottom */}
                 <div className={clsx(
-                    'p-4 border-t',
+                    'p-4 flex justify-center border-t',
                     isDarkMode ? 'border-gray-700' : 'border-gray-200'
                 )}>
                     <Switch
                         checked={isDarkMode}
                         onChange={toggleTheme}
                         className={clsx(
-                            'relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2',
-                            isDarkMode ? 'bg-blue-600' : 'bg-gray-300'
+                            'relative inline-flex h-6 w-12 items-center rounded-full transition-colors duration-300',
+                            isDarkMode 
+                                ? 'bg-blue-600 hover:bg-blue-700' 
+                                : 'bg-gray-200 hover:bg-gray-300'
                         )}
                     >
                         <span className="sr-only">Toggle theme</span>
                         <span
                             className={clsx(
-                                'inline-block h-5 w-5 transform rounded-full bg-white shadow-lg ring-0 transition-transform',
-                                isDarkMode ? 'translate-x-5' : 'translate-x-0.5'
+                                'inline-block h-5 w-5 transform rounded-full transition-transform duration-300',
+                                isDarkMode
+                                    ? 'translate-x-6.5 bg-gray-800' 
+                                    : 'translate-x-0.5 bg-white',
+                                'hover:shadow-lg'
                             )}
-                        />
+                        >
+                            <span className={clsx(
+                                'flex h-full w-full items-center justify-center text-sm',
+                                isDarkMode ? 'text-blue-600' : 'text-gray-400'
+                            )}>
+                                {isDarkMode ? '🌙' : '☀️'}
+                            </span>
+                        </span>
                     </Switch>
                     {/* <div className="flex items-center mt-2">
                         {isDarkMode ? (

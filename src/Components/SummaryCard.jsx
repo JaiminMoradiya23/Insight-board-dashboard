@@ -22,8 +22,8 @@ const SummaryCard = ({ title, value, icon: Icon, color }) => {
   return (
     <div className={clsx(
       'rounded-xl p-6 transition-all duration-300',
-      isDarkMode 
-        ? 'bg-gray-800 border border-gray-700 hover:border-gray-600' 
+      isDarkMode
+        ? 'bg-gray-800 border border-gray-700 hover:border-gray-600'
         : 'bg-white border border-gray-200 hover:border-gray-300'
     )}>
       <div className="flex items-center justify-between">
@@ -49,7 +49,7 @@ const SummaryCard = ({ title, value, icon: Icon, color }) => {
           <Icon className={clsx(
             'w-6 h-6',
             color.replace('bg-', 'text-'),
-            isDarkMode && 'text-opacity-80'
+            isDarkMode && 'text-white'
           )} />
         </div>
       </div>

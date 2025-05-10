@@ -44,10 +44,10 @@ const PolarChart = ({ data }) => {
         callbacks: {
           label: function(context) {
             const label = context.label || '';
-            const value = context.parsed || 0;
+            const value = context.raw || 0;
             const total = context.dataset.data.reduce((a, b) => a + b, 0);
             const percentage = Math.round((value / total) * 100);
-            return `${label}: ${value} (${percentage}%)`;
+            return `${label}: ${value.toLocaleString()} (${percentage}%)`;
           },
         },
       },

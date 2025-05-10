@@ -39,23 +39,23 @@ function DashboardContent() {
             labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
             datasets: [
               {
+                label: 'Total Revenue',
+                data: [13500, 20000, 18000, 28000, 25000, 35000],
+                borderColor: 'rgb(139, 92, 246)',
+                backgroundColor: 'rgba(139, 92, 246, 0.2)',
+              },
+              {
                 label: 'Total Sales',
                 data: [12000, 19000, 15000, 25000, 22000, 30000],
                 borderColor: 'rgb(99, 102, 241)',
                 backgroundColor: 'rgba(99, 102, 241, 0.2)',
               },
-              {
-                label: 'Total Revenue',
-                data: [15000, 22000, 18000, 28000, 25000, 35000],
-                borderColor: 'rgb(139, 92, 246)',
-                backgroundColor: 'rgba(139, 92, 246, 0.2)',
-              }
             ]
           },
           polar: {
-            labels: ['Desktop', 'Mobile', 'Tablet', 'Other'],
+            labels: ['Desktop', 'Mobile', 'Tablet', 'Laptop', 'Other'],
             datasets: [{
-              data: [300, 250, 100, 50],
+              data: [74, 97, 68, 57, 78],
               backgroundColor: [
                 'rgba(99, 102, 241, 0.8)',
                 'rgba(139, 92, 246, 0.8)',
